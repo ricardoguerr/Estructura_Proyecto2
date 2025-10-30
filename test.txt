@@ -1,0 +1,1 @@
+Hola este es un texto de prueba.Vamos a ver si el algoritmo de Huffman funciona correctamente.Repetir, repetir, repetir para que haya frecuencias.

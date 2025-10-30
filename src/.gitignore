@@ -1,0 +1,16 @@
+# Archivos compilados de Java
+*.class
+
+# Archivos de configuración del IDE (VSCode)
+.vscode/
+
+# Archivos de prueba
+test.txt
+test.cmp
+test_decompressed.txt
+
+# Archivos temporales (que usará tu FileProcessor)
+*.temp
+
+# Archivo de Log (que crearemos después)
+log.txt
