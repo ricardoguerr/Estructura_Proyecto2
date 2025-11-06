@@ -17,13 +17,13 @@ public class HuffmanDecompressor {
     public HuffmanDecompressor() {
         this.freqTable = new HashMap<>();
     }
-    
+
     // --- PASO 1: Leer el Encabezado ---
     // Lee el encabezado del archivo .cmp y guarda la tabla de frecuencias
     private void readHeader(DataInputStream dis) throws IOException {
         // 1. Leer cuántas entradas hay en la tabla
         int tableSize = dis.readInt();
-        
+
         // 2. Limpiar la tabla por si se usa la clase varias veces
         this.freqTable.clear();
 
@@ -33,7 +33,7 @@ public class HuffmanDecompressor {
             int freq = dis.readInt();
             this.freqTable.put(b, freq);
         }
-        
+
         // 4. Calcular el total de bytes originales (lo necesitaremos)
         // (Esto lo haremos después, al leer los datos)
     }
@@ -47,7 +47,7 @@ public class HuffmanDecompressor {
         for (Map.Entry<Byte, Integer> entry : this.freqTable.entrySet()) {
             pq.add(new HuffmanNode(entry.getKey(), entry.getValue()));
         }
-        
+
         // 2. Construir el árbol
         while (pq.size() > 1) {
             HuffmanNode left = pq.poll();
@@ -56,14 +56,14 @@ public class HuffmanDecompressor {
             HuffmanNode parent = new HuffmanNode(newFreq, left, right);
             pq.add(parent);
         }
-        
+
         // 3. Guardar la raíz del árbol
         this.huffmanTreeRoot = pq.poll();
     }
-    
+
     // --- PASO 3: Descomprimir los Datos ---
     private void decodeData(DataInputStream dis, FileOutputStream fos) throws IOException {
-        
+
         // Calculamos el número total de bytes que debemos escribir
         long totalBytes = 0;
         for (int freq : this.freqTable.values()) {
@@ -76,12 +76,12 @@ public class HuffmanDecompressor {
         int byteRead;
         // 1. Leer el resto del archivo, byte por byte
         while ((byteRead = dis.read()) != -1) {
-            
+
             // 2. Procesar cada bit dentro de ese byte
             for (int i = 7; i >= 0; i--) {
                 // Si ya escribimos todos los bytes, paramos.
                 if (bytesWritten >= totalBytes) {
-                    return; 
+                    return;
                 }
 
                 // 3. Obtenemos el bit (0 o 1)
@@ -100,7 +100,7 @@ public class HuffmanDecompressor {
                     // Escribimos el byte original en el archivo de salida
                     fos.write(currentNode.data);
                     bytesWritten++;
-                    
+
                     // Y volvemos a la raíz para buscar el siguiente byte
                     currentNode = this.huffmanTreeRoot;
                 }

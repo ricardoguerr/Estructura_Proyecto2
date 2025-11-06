@@ -36,7 +36,7 @@ public class Encryptor {
 
             // Leemos el archivo de entrada byte por byte
             while ((byteRead = is.read()) != -1) {
-                
+
                 // --- El núcleo del cifrado XOR ---
                 // 1. Tomamos el byte del archivo (byteRead)
                 // 2. Tomamos el byte de la contraseña (key[keyIndex])
@@ -48,14 +48,14 @@ public class Encryptor {
 
                 // Movemos el índice de la contraseña
                 keyIndex++;
-                
+
                 // Si llegamos al final de la contraseña, volvemos al inicio
                 if (keyIndex == keyLength) {
                     keyIndex = 0;
                 }
             }
         }
-        
+
         System.out.println("Archivo procesado (encriptado/desencriptado) exitosamente.");
     }
 }

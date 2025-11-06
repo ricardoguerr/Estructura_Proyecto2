@@ -6,7 +6,7 @@ import java.io.IOException;
 public class MainTest {
 
     public static void main(String[] args) {
-        
+
         String inputFile = "test.txt";
         String compressedFile = "test.cmp";
         String decompressedFile = "test_decompressed.txt";

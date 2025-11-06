@@ -14,7 +14,7 @@ public class HuffmanCompressor {
 
     // Mapa para guardar los códigos generados (ej. 'A' -> "01")
     private Map<Byte, String> huffmanCodes;
-    
+
     // El constructor
     public HuffmanCompressor() {
         this.huffmanCodes = new HashMap<>();
@@ -32,7 +32,7 @@ public class HuffmanCompressor {
         }
         return freqTable;
     }
-    
+
     // --- PASO 2: Construir el Árbol ---
     private HuffmanNode buildHuffmanTree(Map<Byte, Integer> freqTable) {
         PriorityQueue<HuffmanNode> pq = new PriorityQueue<>();
@@ -41,7 +41,7 @@ public class HuffmanCompressor {
         for (Map.Entry<Byte, Integer> entry : freqTable.entrySet()) {
             pq.add(new HuffmanNode(entry.getKey(), entry.getValue()));
         }
-        
+
         // 2. Construir el árbol
         while (pq.size() > 1) {
             HuffmanNode left = pq.poll();
@@ -50,11 +50,11 @@ public class HuffmanCompressor {
             HuffmanNode parent = new HuffmanNode(newFreq, left, right);
             pq.add(parent);
         }
-        
+
         // 3. Devolver la raíz del árbol
         return pq.poll();
     }
-    
+
     // --- PASO 3: Generar Códigos ---
     // Este método "llena" el mapa huffmanCodes
     private void generateCodes(HuffmanNode node, String code) {
@@ -74,16 +74,16 @@ public class HuffmanCompressor {
         // Vamos a la derecha, agregando un '1' al código
         generateCodes(node.right, code + "1");
     }
-    
+
     // --- (PASO 4: Escribir el archivo comprimido - AÚN NO IMPLEMENTADO) ---
     // Este será el método público principal
-    
+
     /**
      * Comprime un archivo usando el algoritmo de Huffman.
      * @param inputFilePath Archivo de entrada
      * @param outputFilePath Archivo de salida (ej. "archivo.cmp")
      */
-   // Reemplaza el método compress() que tenías por este:
+    // Reemplaza el método compress() que tenías por este:
 
     /**
      * Comprime un archivo usando el algoritmo de Huffman.
@@ -91,21 +91,21 @@ public class HuffmanCompressor {
      * @param outputFilePath Archivo de salida (ej. "archivo.cmp")
      */
     public void compress(String inputFilePath, String outputFilePath) throws IOException {
-        
+
         // --- PASOS 1, 2 y 3 (Ya los teníamos) ---
 
         // 1. Contar frecuencias
         Map<Byte, Integer> freqTable = buildFrequencyTable(inputFilePath);
-        
+
         // 2. Construir el árbol
         HuffmanNode root = buildHuffmanTree(freqTable);
-        
+
         // 3. Generar los códigos
-        this.huffmanCodes.clear(); 
-        generateCodes(root, ""); 
+        this.huffmanCodes.clear();
+        generateCodes(root, "");
 
         // --- PASO 4: Escribir el archivo comprimido ---
-        
+
         // Usamos try-with-resources para que los streams se cierren solos
         try (FileInputStream fis = new FileInputStream(inputFilePath);
              FileOutputStream fos = new FileOutputStream(outputFilePath);
@@ -118,7 +118,7 @@ public class HuffmanCompressor {
             writeCompressedData(fis, dos, huffmanCodes);
 
         }
-        
+
         System.out.println("¡Archivo comprimido exitosamente en: " + outputFilePath + "!");
     }
 
@@ -141,7 +141,7 @@ public class HuffmanCompressor {
      * Escribe los datos comprimidos (bit a bit).
      */
     private void writeCompressedData(FileInputStream fis, DataOutputStream dos, Map<Byte, String> huffmanCodes) throws IOException {
-        
+
         byte buffer = 0; // Buffer para acumular bits (un byte a la vez)
         int bitCount = 0; // Contador de cuántos bits hay en el buffer
 
@@ -150,7 +150,7 @@ public class HuffmanCompressor {
         while ((byteRead = fis.read()) != -1) {
             // 2. Obtener el código Huffman para ese byte (ej. "01101")
             String code = huffmanCodes.get((byte) byteRead);
-            
+
             // 3. Iterar sobre cada '0' o '1' en el código
             for (char c : code.toCharArray()) {
                 // 4. Mover el buffer 1 espacio a la izquierda
@@ -160,7 +160,7 @@ public class HuffmanCompressor {
                 if (c == '1') {
                     buffer = (byte) (buffer | 1);
                 }
-                
+
                 bitCount++; // Incrementamos el contador de bits
 
                 // 6. Si el buffer está lleno (8 bits), lo escribimos al archivo
@@ -182,6 +182,6 @@ public class HuffmanCompressor {
             dos.writeByte(buffer); // Escribimos el último byte
         }
     }
-    
+
     // (Aquí iría el método writeCompressedFile)
 }
